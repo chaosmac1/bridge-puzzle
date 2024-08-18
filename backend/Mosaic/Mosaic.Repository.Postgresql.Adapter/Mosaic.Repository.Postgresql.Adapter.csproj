@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql" Version="8.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mosaic.DefaultNuget\Mosaic.DefaultNuget.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Postgresql.Kernel\Mosaic.Repository.Postgresql.Kernel.csproj" />
+      <ProjectReference Include="..\Mosaic.Share.Kernel\Mosaic.Share.Kernel.csproj" />
+    </ItemGroup>
+
+</Project>

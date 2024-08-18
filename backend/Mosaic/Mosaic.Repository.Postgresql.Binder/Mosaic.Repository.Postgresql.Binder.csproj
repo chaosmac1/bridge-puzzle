@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mosaic.Repository.Collection.Adapter\Mosaic.Repository.Collection.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Postgresql.Adapter\Mosaic.Repository.Postgresql.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Postgresql.Domain\Mosaic.Repository.Postgresql.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
