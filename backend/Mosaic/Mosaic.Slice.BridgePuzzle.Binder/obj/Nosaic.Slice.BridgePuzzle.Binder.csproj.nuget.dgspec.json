@@ -1,0 +1,134 @@
+{
+  "format": 1,
+  "restore": {
+    "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Binder/Nosaic.Slice.BridgePuzzle.Binder.csproj": {}
+  },
+  "projects": {
+    "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Binder/Nosaic.Slice.BridgePuzzle.Binder.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Binder/Nosaic.Slice.BridgePuzzle.Binder.csproj",
+        "projectName": "Mosaic.Slice.BridgePuzzle.Binder",
+        "projectPath": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Binder/Nosaic.Slice.BridgePuzzle.Binder.csproj",
+        "packagesPath": "/home/chaosmac/.nuget/packages/",
+        "outputPath": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Binder/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/chaosmac/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Domain/Nosaic.Slice.BridgePuzzle.Domain.csproj": {
+                "projectPath": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Domain/Nosaic.Slice.BridgePuzzle.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/chaosmac/dotnet/sdk/8.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Domain/Nosaic.Slice.BridgePuzzle.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Domain/Nosaic.Slice.BridgePuzzle.Domain.csproj",
+        "projectName": "Nosaic.Slice.BridgePuzzle.Domain",
+        "projectPath": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Domain/Nosaic.Slice.BridgePuzzle.Domain.csproj",
+        "packagesPath": "/home/chaosmac/.nuget/packages/",
+        "outputPath": "/aprojekt/bridge-puzzle/backend/Mosaic/Nosaic.Slice.BridgePuzzle.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/chaosmac/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FastEndpoints": {
+              "target": "Package",
+              "version": "[5.28.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/chaosmac/dotnet/sdk/8.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

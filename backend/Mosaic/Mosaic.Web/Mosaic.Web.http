@@ -1,0 +1,6 @@
+@Mosaic.Web_HostAddress = http://localhost:5182
+
+GET {{Mosaic.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>Mosaic.Slice.BridgePuzzle.Domain</AssemblyName>
+        <RootNamespace>Mosaic.Slice.BridgePuzzle.Domain</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FastEndpoints" Version="5.28.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mosaic.Repository.Collection.Adapter\Mosaic.Repository.Collection.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Environment.Adapter\Mosaic.Repository.Environment.Adapter.csproj" />
+    </ItemGroup>
+
+</Project>

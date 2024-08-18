@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mosaic.DefaultNuget\Mosaic.DefaultNuget.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Collection.Adapter\Mosaic.Repository.Collection.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Environment.Adapter\Mosaic.Repository.Environment.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Postgresql.Adapter\Mosaic.Repository.Postgresql.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Postgresql.Kernel\Mosaic.Repository.Postgresql.Kernel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CassandraCSharpDriver" Version="3.20.1" />
+      <PackageReference Include="Dapper" Version="2.1.35" />
+      <PackageReference Include="NLog" Version="5.3.3" />
+      <PackageReference Include="Npgsql" Version="8.0.3" />
+    </ItemGroup>
+
+</Project>

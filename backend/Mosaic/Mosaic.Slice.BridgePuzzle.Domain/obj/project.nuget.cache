@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "dgSpecHash": "qfxydweDHKc=",
+  "success": true,
+  "projectFilePath": "/aprojekt/bridge-puzzle/backend/Mosaic/Mosaic.Slice.BridgePuzzle.Domain/Mosaic.Slice.BridgePuzzle.Domain.csproj",
+  "expectedPackageFiles": [
+    "/home/chaosmac/.nuget/packages/fastendpoints/5.28.0/fastendpoints.5.28.0.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/fastendpoints.attributes/5.28.0/fastendpoints.attributes.5.28.0.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/fastendpoints.messaging.core/5.28.0/fastendpoints.messaging.core.5.28.0.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/fluentvalidation/11.9.2/fluentvalidation.11.9.2.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/lamliballover/3.0.0/lamliballover.3.0.0.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/microsoft.aspnetcore.openapi/8.0.8/microsoft.aspnetcore.openapi.8.0.8.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.0/microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/nlog/5.3.3/nlog.5.3.3.nupkg.sha512",
+    "/home/chaosmac/.nuget/packages/portable.bouncycastle/1.9.0/portable.bouncycastle.1.9.0.nupkg.sha512"
+  ],
+  "logs": []
+}
