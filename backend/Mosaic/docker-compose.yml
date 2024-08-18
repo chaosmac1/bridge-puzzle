@@ -1,0 +1,6 @@
+﻿services:
+  mosaic.web:
+    image: mosaic.web
+    build:
+      context: .
+      dockerfile: Mosaic.Web/Dockerfile
