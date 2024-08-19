@@ -1,3 +1,4 @@
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mosaic.Repository.Postgresql.Adapter;
