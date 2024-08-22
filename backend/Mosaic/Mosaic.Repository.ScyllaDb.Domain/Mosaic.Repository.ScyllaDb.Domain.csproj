@@ -13,6 +13,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Mosaic.Repository.Environment.Adapter\Mosaic.Repository.Environment.Adapter.csproj" />
       <ProjectReference Include="..\Mosaic.Repository.ScyllaDb.Adapter\Mosaic.Repository.ScyllaDb.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.ScyllaDb.Kernel\Mosaic.Repository.ScyllaDb.Kernel.csproj" />
     </ItemGroup>
 
 </Project>

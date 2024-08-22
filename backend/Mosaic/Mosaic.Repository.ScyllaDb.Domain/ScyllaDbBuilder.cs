@@ -7,6 +7,8 @@ public static class ScyllaDbBuilder {
     private static Cluster? _cluster = null;
     
     private static void Init() {
+        ScyllaDbMapper.DefineGlobalScyllaDbMapper();
+        
         var envJson = Repository.Collection.Adapter.Injection.GlobalServiceProvider.GetEnvJson();
         _cluster = Cluster.Builder()
                           .AddContactPoint(envJson.SCYLLADB_URL)
