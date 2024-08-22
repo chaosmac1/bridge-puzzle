@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Mosaic.Repository.Collection.Loader\Mosaic.Repository.Collection.Loader.csproj" />
       <ProjectReference Include="..\Mosaic.Repository.Environment.Binder\Mosaic.Repository.Environment.Binder.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Logging.Binder\Mosaic.Repository.Logging.Binder.csproj" />
       <ProjectReference Include="..\Mosaic.Repository.Postgresql.Binder\Mosaic.Repository.Postgresql.Binder.csproj" />
       <ProjectReference Include="..\Mosaic.Repository.ScyllaDb.Binder\Mosaic.Repository.ScyllaDb.Binder.csproj" />
       <ProjectReference Include="..\Mosaic.Slice.BridgePuzzle.Binder\Mosaic.Slice.BridgePuzzle.Binder.csproj" />

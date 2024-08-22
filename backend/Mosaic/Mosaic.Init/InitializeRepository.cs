@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Mosaic.Repository.Logging.Adapter;
 using Mosaic.Repository.Postgresql.Adapter;
 using Mosaic.Repository.ScyllaDb.Adapter;
 
@@ -14,6 +15,7 @@ public class InitializeRepository {
               .Bind(Repository.Environment.Binder.ServiceEnvironmentBinder.Create())
               .Bind(Repository.Postgresql.Binder.ServicePostgresqlBinder.Create())
               .Bind(Repository.ScyllaDb.Binder.ServiceScyllaDbBinder.Create())
+              .Bind(Repository.Logging.Binder.ServiceLoggingBinder.Create())
               .Build()
         ;
 
@@ -21,5 +23,6 @@ public class InitializeRepository {
         var serviceProvider = asyncScope.ServiceProvider;
         serviceProvider.GetNpgsqlTableCreator().CreateTableAsync().GetAwaiter().GetResult();
         serviceProvider.GetScyllaDbTableCreator().CreateTableAsync().GetAwaiter().GetResult();
+        serviceProvider.GetInitializeLogging().RunAsync().GetAwaiter().GetResult();
     }
 }
