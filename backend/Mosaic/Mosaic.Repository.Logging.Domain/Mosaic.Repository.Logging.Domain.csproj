@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Mosaic.Repository.Collection.Adapter\Mosaic.Repository.Collection.Adapter.csproj" />
       <ProjectReference Include="..\Mosaic.Repository.Logging.Adapter\Mosaic.Repository.Logging.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.ScyllaDb.Adapter\Mosaic.Repository.ScyllaDb.Adapter.csproj" />
     </ItemGroup>
 
     <ItemGroup>

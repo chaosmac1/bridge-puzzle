@@ -73,6 +73,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosaic.Repository.Logging.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosaic.Repository.Logging.Domain", "Mosaic.Repository.Logging.Domain\Mosaic.Repository.Logging.Domain.csproj", "{CF2AA559-567C-401E-A3B4-A83AA518B0FD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Finder", "Finder", "{43ED4B9C-D599-44A3-988B-99F291CC16CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,7 @@ Global
 		{8C82CCDD-EBAB-4090-B9AF-0F30971AB348} = {B551E3DD-2A0D-449C-BBC0-17FF9852FB10}
 		{C8ED718E-DBEE-46BC-A628-D7E284E09A46} = {B551E3DD-2A0D-449C-BBC0-17FF9852FB10}
 		{CF2AA559-567C-401E-A3B4-A83AA518B0FD} = {B551E3DD-2A0D-449C-BBC0-17FF9852FB10}
+		{43ED4B9C-D599-44A3-988B-99F291CC16CB} = {1AD4431D-452F-4B22-A31B-7975CA4B93DC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5D621217-D658-4F0D-AB8F-F27D2B08E98D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

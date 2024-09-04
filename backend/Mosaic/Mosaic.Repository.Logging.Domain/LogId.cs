@@ -1,4 +1,5 @@
-﻿using Mosaic.Repository.Logging.Adapter;
+﻿using System.Numerics;
+using Mosaic.Repository.Logging.Adapter;
 using Mosaic.Repository.Logging.Adapter.Interface;
 
 namespace Mosaic.Repository.Logging.Domain;

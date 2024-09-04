@@ -3,6 +3,12 @@ using Mosaic.Repository.Logging.Adapter.Interface;
 using NLog.Config;
 using NLog.Filters;
 using NLog.Targets;
+using NLog;
+using NLog.Config;
+using NLog.Filters;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
+using LogLevel = NLog.LogLevel;
 
 namespace Mosaic.Repository.Logging.Domain;
 
@@ -11,50 +17,28 @@ public class InitializeLogging: IInitializeLogging {
 
     public static IInitializeLogging Create() => new InitializeLogging();
 
-    public async Task RunAsync() {
-        
-    }
-    
-    public static ILogger Setup() {
+    public Task RunAsync() {
         var loggingConfiguration = new LoggingConfiguration();
         
-        var consoleTarget = new ColoredConsoleTarget {
+        
+        var coloredConsoleTarget = new ColoredConsoleTarget {
             AutoFlush = true,
             UseDefaultRowHighlightingRules = true
         };
         
-        
-        
-        var dbTarget = new NLog.Targets.DatabaseTarget("db") {
-            Name  = "db",
-            DBProvider = "Npgsql.NpgsqlConnection, Npgsql",
-            ConnectionString = CopperBackend.Frame.Database.Postgres.GetSettingsNoWithAsync(),
-            IsolationLevel = IsolationLevel.Unspecified,
-            KeepConnection = true,
-            CommandText = @"
-insert 
-into log
-    (log_date,log_level,log_logger,log_message, log_call_site, log_thread, log_exception, log_stacktrace) 
-values
-    (@time_stamp, @level, @logger, @message, @call_site, @threadid, @log_exception, @stacktrace);",
-            
+        var cassandraTarget = new CassandraTarget();
+
+        var bufferingTargetWrapper = new BufferingTargetWrapper() {
+            BufferSize = 2,
+            WrappedTarget = cassandraTarget,
+            Name = "Cassandra",
+            FlushTimeout = 10000,
+            SlidingTimeout = true,
         };
-            
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@time_stamp", "${longdate}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@level", "${level}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@logger", "${logger}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@message", "${message}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@call_site", "${callsite:filename=true}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@threadid", "${threadid}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@log_exception", "${exception:tostring}"));
-        dbTarget.Parameters.Add(new DatabaseParameterInfo("@stacktrace", "${stacktrace}"));
         
-        loggingConfiguration.AddTarget("console", consoleTarget);
-        loggingConfiguration.AddTarget("db", dbTarget);
-
-        var min = LogLevel.FromString(Env.MinLogging)??throw new NullReferenceException("minLevel");
-        var max = LogLevel.FromString(Env.MaxLogging)??throw new NullReferenceException("maxLevel");
-
+        loggingConfiguration.AddTarget("console", coloredConsoleTarget);
+        loggingConfiguration.AddTarget("db", bufferingTargetWrapper);
+        
         var filter = new WhenMethodFilter(static info => {
             var result = info.Level.Ordinal switch {
                 // Trace;
@@ -76,19 +60,22 @@ values
             return result;
         });
         
-        var ruleDb = new LoggingRule("*", min, max, dbTarget) { Filters = { filter } };
-        var ruleConsole = new LoggingRule("*", min, max, consoleTarget) { Filters = { filter } };
-        // ruleElse.Targets.Add(dbTarget);
+        var ruleColoredConsoleTarget = new LoggingRule("*", LogLevel.Trace, LogLevel.Fatal, coloredConsoleTarget) { Filters = { filter } };
+        var ruleCassandraTarget = new LoggingRule("*", LogLevel.Trace, LogLevel.Fatal, cassandraTarget) { Filters = { filter } };
+        var ruleBufferingTargetWrapper = new LoggingRule("*", LogLevel.Trace, LogLevel.Fatal, bufferingTargetWrapper) { Filters = { filter } };
         
-        loggingConfiguration.AddRule(ruleDb);
-        loggingConfiguration.AddRule(ruleConsole);
+        loggingConfiguration.AddRule(ruleColoredConsoleTarget);
+        loggingConfiguration.AddRule(ruleCassandraTarget);
+        loggingConfiguration.AddRule(ruleBufferingTargetWrapper);
         
-        return NLog.LogManager
-                         .Setup()
-                         .LoadConfiguration(loggingConfiguration)
-                         .GetCurrentClassLogger();
+        var logger =  NLog.LogManager
+            .Setup()
+            .LoadConfiguration(loggingConfiguration)
+            .GetCurrentClassLogger();
+        
+        return Task.FromResult(true);
     }
-
+    
     private static bool LoggerNameIsMicrosoft(string loggerName) 
         => loggerName.StartsWith("Microsoft.", StringComparison.Ordinal);
 }
