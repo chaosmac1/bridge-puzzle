@@ -1,15 +1,22 @@
 using Cassandra;
 using Mosaic.Repository.Environment.Adapter;
+using Mosaic.Repository.Environment.Adapter.Interface;
 
 namespace Mosaic.Repository.ScyllaDb.Domain;
 
-public static class ScyllaDbBuilder {
+public class ScyllaDbBuilder {
     private static Cluster? _cluster = null;
+
+    private readonly IEnvJson _envJson;
+
+    public ScyllaDbBuilder(IEnvJson envJson) {
+        _envJson = envJson;
+    }
     
-    private static void Init() {
+    private void Init() {
         ScyllaDbMapper.DefineGlobalScyllaDbMapper();
         
-        var envJson = Repository.Collection.Adapter.Injection.GlobalServiceProvider.GetEnvJson();
+        var envJson = _envJson;
         _cluster = Cluster.Builder()
                           .AddContactPoint(envJson.SCYLLADB_URL)
                           .WithPort(envJson.SCYLLADB_PORT)
@@ -27,7 +34,7 @@ public static class ScyllaDbBuilder {
         ;
     }
 
-    public static async Task<ISession> CreateNewSessionAsync() {
+    public async Task<ISession> CreateNewSessionAsync() {
         if (_cluster is null) {
             Init();
         }

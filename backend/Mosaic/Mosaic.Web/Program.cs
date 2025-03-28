@@ -1,14 +1,16 @@
 using FastEndpoints;
 using Mosaic.Init;
 
-InitializeRepository.Create().Run();
-
-var builder = WebApplication.CreateSlimBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddFastEndpoints(Options);
+IServiceCollection services = builder.Services;
+
+services.AddEndpointsApiExplorer();
+services.AddFastEndpoints(Options);
+
+InitializeRepository.Create().Run(services);
 
 void Options(EndpointDiscoveryOptions config) {
     config.Filter = type => {

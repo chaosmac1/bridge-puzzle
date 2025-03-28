@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Pgvector" Version="0.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mosaic.Share.Kernel\Mosaic.Share.Kernel.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -13,9 +13,9 @@ public class CassandraTarget: AsyncTaskTarget {
     private readonly IScyllaDbContext _dbContext;
     private readonly IQueryLogContext _queryLogContext;
 
-    public CassandraTarget() {
-        _dbContext = Collection.Adapter.Injection.GlobalServiceProvider.GetScyllaDbContext();
-        _queryLogContext = Collection.Adapter.Injection.GlobalServiceProvider.GetQueryLogContext();
+    public CassandraTarget(IScyllaDbContext dbContext, IQueryLogContext queryLogContext) {
+        _dbContext = dbContext;
+        _queryLogContext = queryLogContext;
     }
 
     protected override async Task WriteAsyncTask(LogEventInfo logEvent, CancellationToken cancellationToken) {

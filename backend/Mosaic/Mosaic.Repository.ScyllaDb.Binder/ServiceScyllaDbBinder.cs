@@ -13,8 +13,10 @@ public class ServiceScyllaDbBinder: Collection.Adapter.Export.IServiceBinder {
 
     public static Collection.Adapter.Export.IServiceBinder Create() => new ServiceScyllaDbBinder();
     
-    public void Bind(ServiceCollection serviceCollection) {
-        serviceCollection.AddScoped<IScyllaDbContext>((provider => new Domain.ScyllaDbContext()));
+    public void Bind(IServiceCollection serviceCollection) {
+        
+        serviceCollection.AddSingleton<ScyllaDbBuilder>();
+        serviceCollection.AddScoped<IScyllaDbContext>((provider => new Domain.ScyllaDbContext(provider.GetService<ScyllaDbBuilder>()!)));
         serviceCollection.AddScoped<Mapper>((provider => {
             var mapper = provider.GetScyllaDbContext().GetMapperAsync();
             if (mapper.IsCompletedSuccessfully) {

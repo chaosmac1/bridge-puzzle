@@ -1,5 +1,6 @@
 namespace Mosaic.Slice.BridgePuzzle.Domain;
 
-public class PuzzleSolutionResponse {
-    public required string Test { get; set; }
+public sealed class PuzzleSolutionResponse {
+    public required string[] SolutionWords { get; init; }
+    public required string SolutionMiddleWord { get; init; }
 }

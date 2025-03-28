@@ -1,14 +1,23 @@
+using Dapper;
 using Mosaic.Repository.Environment.Adapter;
+using Mosaic.Repository.Environment.Adapter.Interface;
 using Npgsql;
+using Pgvector.Dapper;
 
 namespace Mosaic.Repository.Postgresql.Domain;
 
-internal static class NpgsqlBuilder {
+public class NpgsqlBuilder {
     private static string? _npgsqlConnectionString;
+    private static NpgsqlDataSourceBuilder? _npgsqlDataSourceBuilder;
 
-    private static void Init() {
-        IServiceProvider serviceProvider = Collection.Adapter.Injection.GlobalServiceProvider;
-        var envJson = serviceProvider.GetEnvJson();
+    private IEnvJson _envJson;
+
+    public NpgsqlBuilder(IEnvJson envJson) {
+        _envJson = envJson;
+    }
+
+    private void Init() {
+        var envJson = _envJson;
         
         
         var connStringBuilder = new NpgsqlConnectionStringBuilder();
@@ -26,10 +35,14 @@ internal static class NpgsqlBuilder {
         connStringBuilder.TcpKeepAlive = true;
         
         _npgsqlConnectionString = connStringBuilder.ToString();
+        _npgsqlDataSourceBuilder = new NpgsqlDataSourceBuilder(_npgsqlConnectionString);
+        _npgsqlDataSourceBuilder.UseVector();
+        
+        SqlMapper.AddTypeHandler(new VectorTypeHandler());
     }
 
-    public static async Task<NpgsqlConnection> BuildNpgsqlConnection() {
-        if (_npgsqlConnectionString is null) {
+    public async Task<NpgsqlConnection> BuildNpgsqlConnection() {
+        if (_npgsqlConnectionString is null || _npgsqlDataSourceBuilder is null) {
             Init();
         }
         
@@ -37,6 +50,7 @@ internal static class NpgsqlBuilder {
             _npgsqlConnectionString
             ?? throw new NullReferenceException(nameof(_npgsqlConnectionString))
         );
+        
         await con.OpenAsync();
         return con;
     }

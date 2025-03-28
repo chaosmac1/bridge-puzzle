@@ -14,8 +14,8 @@ public class ScyllaDbContext: IScyllaDbContext {
     private readonly Task<ISession> _session;
     private Task<Mapper> _mapper;
     
-    public ScyllaDbContext() {
-        _session = Domain.ScyllaDbBuilder.CreateNewSessionAsync();
+    public ScyllaDbContext(ScyllaDbBuilder scyllaDbBuilder) {
+        _session = scyllaDbBuilder.CreateNewSessionAsync();
         _mapper = GetMapperTask(_session);
         
         return;

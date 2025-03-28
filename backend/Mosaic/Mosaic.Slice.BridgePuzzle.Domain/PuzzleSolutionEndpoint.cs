@@ -1,25 +1,23 @@
+using System.Collections.Frozen;
 using FastEndpoints;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.DependencyInjection;
-using Mosaic.Repository.Environment.Adapter;
 using Mosaic.Repository.Environment.Adapter.Interface;
+using Mosaic.Repository.Postgresql.Adapter.Interface;
+using Mosaic.Share.Kernel;
+using Mosaic.Share.Kernel.Word;
+using Mosaic.Share.Kernel.WordWithVector;
+using Pgvector;
 
 namespace Mosaic.Slice.BridgePuzzle.Domain;
 
 public class PuzzleSolutionEndpoint : Endpoint<PuzzleSolutionRequest, PuzzleSolutionResponse> {
-    private readonly AsyncServiceScope _asyncServiceScope;
-    private readonly IServiceProvider _serviceProvider;
     private readonly IEnvJson _envJson;
+    private readonly INpgsqlContext _npgsqlContext;
+    private readonly IQueryWordVectorSpaceContext _queryWordVectorSpaceContext;
 
-    public PuzzleSolutionEndpoint() {
-        _asyncServiceScope = Repository.Collection.Adapter.Injection.GlobalServiceProvider.CreateAsyncScope();
-        _serviceProvider = _asyncServiceScope.ServiceProvider;
-        _envJson = _serviceProvider.GetEnvJson();
-    }
-
-    public override async Task OnAfterHandleAsync(PuzzleSolutionRequest req, PuzzleSolutionResponse res, CancellationToken ct) {
-        await _asyncServiceScope.DisposeAsync();        
-        await base.OnAfterHandleAsync(req, res, ct);
+    public PuzzleSolutionEndpoint(IEnvJson envJson, INpgsqlContext npgsqlContext, IQueryWordVectorSpaceContext queryWordVectorSpaceContext) {
+        _envJson = envJson;
+        _npgsqlContext = npgsqlContext;
+        _queryWordVectorSpaceContext = queryWordVectorSpaceContext;
     }
 
     public override void Configure() {
@@ -28,6 +26,96 @@ public class PuzzleSolutionEndpoint : Endpoint<PuzzleSolutionRequest, PuzzleSolu
     }
 
     public override async Task HandleAsync(PuzzleSolutionRequest req, CancellationToken ct) {
-        await SendOkAsync(new PuzzleSolutionResponse() { Test = "Test"}, ct);
+        IReadOnlyWordWithVector[] wordWithVectors = await _queryWordVectorSpaceContext.FilterByWordsAsync(req.AllowedWords.Select(x => new Word(x)).ToArray<IReadOnlyWord>());
+        FrozenDictionary<string, IReadOnlyWordWithVector> words = (await _queryWordVectorSpaceContext.FilterByWordsAsync(
+            req.Rows
+               .Select(x => new Word[] { new Word(x.LeftWord), new Word(x.RightWord) })
+               .SelectMany(x => x)
+               .ToArray<IReadOnlyWord>()
+        )).ToFrozenDictionary(x => x.Name);
+
+        if (wordWithVectors.Length != req.AllowedWords.Length) {
+            await this.SendErrorsAsync(400, ct);
+            return;
+        }
+        
+        var rows = req.Rows.Select(x => Row.Create(words[x.LeftWord], words[x.RightWord], x.Space)).ToArray();
+        while (rows.Length != 1) {
+            var anyTrue = false;
+
+            foreach (var rowNow in rows) {
+                foreach (var rowNext in rows) {
+                    anyTrue = rowNow.SwitchFoundWordDistanceIfBetter(rowNext);
+                }
+            }
+            
+            if (anyTrue) {
+                continue;
+            }  
+            break;
+        }
+        
+        await SendOkAsync(new PuzzleSolutionResponse() {
+            SolutionMiddleWord = new string(req.Rows.Select(reqX => {
+                return rows.First(x => reqX.LeftWord == x.Left.Name && reqX.RightWord == x.Right.Name)!
+                           .FoundWordWithVector!.Name[(int)reqX.SpaceMiddle];
+            }).ToArray()),
+            SolutionWords = rows.Select(x => x.FoundWordWithVector!.Name).ToArray(),
+        }, ct);
+    }
+
+    private class Row {
+        public IReadOnlyWordWithVector Left { get; }
+        public IReadOnlyWordWithVector Right { get; }
+        public Vector MidVector { get; }
+        public int Space { get; }
+        public float FoundWordDistance { get; set; }
+        public IReadOnlyWordWithVector? FoundWordWithVector { get; private set; }
+        
+        public Row(IReadOnlyWordWithVector left, IReadOnlyWordWithVector right, Vector midVector, uint space) {
+            Left = left;
+            Right = right;
+            MidVector = midVector;
+            Space = (int)space;
+        }
+
+        public static Row Create(IReadOnlyWordWithVector left, IReadOnlyWordWithVector right, uint space) {
+            return new Row(left, right, left.ComputeMidpoint(right), space);
+        }
+
+        public void PutNearWordWithVectorAndRemoveFromList(List<IReadOnlyWordWithVector> readOnlyWordWithVectors) {
+            var nearVector = this.MidVector.GetNears(readOnlyWordWithVectors.Select(x => x.Vector));
+            
+            for (var i = 0; i < readOnlyWordWithVectors.Count; i++) {
+                var near = readOnlyWordWithVectors[i];
+                if (!Object.ReferenceEquals(near.Vector, nearVector)) {
+                    continue;
+                }
+
+                FoundWordWithVector = near;
+                FoundWordDistance = MidVector.ComputeDistance(near.Vector);
+                readOnlyWordWithVectors.RemoveAt(i);
+                return;
+            }
+
+            throw new Exception("WordWithVector Not Found By self Vector");
+        }
+
+        public bool SwitchFoundWordDistanceIfBetter(Row row) {
+            if (Object.ReferenceEquals(this, row) || row.Space != this.Space) {
+                return false;
+            }
+            
+            float selfLower = this.MidVector.ComputeDistance(row.FoundWordWithVector!.Vector);
+            float rowLower = row.MidVector.ComputeDistance(this.FoundWordWithVector!.Vector);
+
+            if (!(this.FoundWordDistance >= selfLower) || !(row.FoundWordDistance >= rowLower)) {
+                return false;
+            }
+            
+            (this.FoundWordWithVector, row.FoundWordWithVector) = (row.FoundWordWithVector, this.FoundWordWithVector);
+            return true;
+
+        }
     }
 }

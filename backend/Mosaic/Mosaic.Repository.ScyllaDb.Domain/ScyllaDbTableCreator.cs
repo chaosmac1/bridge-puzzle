@@ -9,7 +9,9 @@ public class ScyllaDbTableCreator: IScyllaDbTableCreator {
         this._scyllaDbContext = scyllaDbContext;
     }
 
-    public async Task CreateTableAsync() {
+    public async Task CreateTablesAsync(CancellationToken cancellationToken = default) {
         await _scyllaDbContext.GetDbAsync();
+        
+        
     }
 }

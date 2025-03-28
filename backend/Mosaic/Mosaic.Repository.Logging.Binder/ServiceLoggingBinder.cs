@@ -2,6 +2,8 @@
 using Mosaic.Repository.Collection.Adapter.Export;
 using Mosaic.Repository.Logging.Adapter.Interface;
 using Mosaic.Repository.Logging.Domain;
+using Mosaic.Repository.ScyllaDb.Adapter;
+using Mosaic.Repository.ScyllaDb.Adapter.Interface;
 
 namespace Mosaic.Repository.Logging.Binder;
 
@@ -10,8 +12,8 @@ public class ServiceLoggingBinder: IServiceBinder {
     
     public static ServiceLoggingBinder Create() => new ServiceLoggingBinder();
     
-    public void Bind(ServiceCollection serviceCollection) {
+    public void Bind(IServiceCollection serviceCollection) {
         serviceCollection.AddScoped<ILogId>(x => LogId.New);
-        serviceCollection.AddScoped<IInitializeLogging>(x => InitializeLogging.Create());
+        serviceCollection.AddSingleton<IInitializeLogging>(x => InitializeLogging.Create(x.GetService<IScyllaDbContext>(), x.GetService<IQueryLogContext>()));
     }
 }

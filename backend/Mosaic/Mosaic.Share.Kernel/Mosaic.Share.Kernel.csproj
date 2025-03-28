@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Database\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mosaic.DefaultNuget\Mosaic.DefaultNuget.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
+    </ItemGroup>
+
 </Project>

@@ -15,6 +15,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Mosaic.Repository.Collection.Adapter\Mosaic.Repository.Collection.Adapter.csproj" />
       <ProjectReference Include="..\Mosaic.Repository.Environment.Adapter\Mosaic.Repository.Environment.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Repository.Postgresql.Adapter\Mosaic.Repository.Postgresql.Adapter.csproj" />
+      <ProjectReference Include="..\Mosaic.Slice.BridgePuzzle.Kernel\Mosaic.Slice.BridgePuzzle.Kernel.csproj" />
     </ItemGroup>
 
 </Project>

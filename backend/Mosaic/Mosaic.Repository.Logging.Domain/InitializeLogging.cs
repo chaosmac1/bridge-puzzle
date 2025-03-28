@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Mosaic.Repository.Logging.Adapter.Interface;
+using Mosaic.Repository.ScyllaDb.Adapter;
+using Mosaic.Repository.ScyllaDb.Adapter.Interface;
 using NLog.Config;
 using NLog.Filters;
 using NLog.Targets;
@@ -13,9 +15,15 @@ using LogLevel = NLog.LogLevel;
 namespace Mosaic.Repository.Logging.Domain;
 
 public class InitializeLogging: IInitializeLogging {
-    private InitializeLogging() {}
+    private readonly IScyllaDbContext _dbContext;
+    private readonly IQueryLogContext _queryLogContext;
 
-    public static IInitializeLogging Create() => new InitializeLogging();
+    private InitializeLogging(IScyllaDbContext dbContext, IQueryLogContext queryLogContext) {
+        _dbContext = dbContext;
+        _queryLogContext = queryLogContext;
+    }
+
+    public static IInitializeLogging Create(IScyllaDbContext dbContext, IQueryLogContext queryLogContext) => new InitializeLogging(dbContext, queryLogContext);
 
     public Task RunAsync() {
         var loggingConfiguration = new LoggingConfiguration();
@@ -26,7 +34,7 @@ public class InitializeLogging: IInitializeLogging {
             UseDefaultRowHighlightingRules = true
         };
         
-        var cassandraTarget = new CassandraTarget();
+        var cassandraTarget = new CassandraTarget(_dbContext, _queryLogContext);
 
         var bufferingTargetWrapper = new BufferingTargetWrapper() {
             BufferSize = 2,

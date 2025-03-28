@@ -1,7 +1,7 @@
 using System.Data;
 using LamLibAllOver.ErrorHandling;
 using Npgsql;
-using Mosaic.Repository.Postgresql.Adapter;
+using Mosaic.Repository.Postgresql.Adapter.Interface;
 
 namespace Mosaic.Repository.Postgresql.Domain;
 
@@ -29,8 +29,8 @@ public class NpgsqlContext: INpgsqlContext {
         return db;
     }
     
-    public NpgsqlContext() {
-        _db = NpgsqlBuilder.BuildNpgsqlConnection();
+    public NpgsqlContext(NpgsqlBuilder builder) {
+        _db = builder.BuildNpgsqlConnection();
         DisposeHandling = Kernel.EDisposeHandling.TransactionRollback;
     }
     

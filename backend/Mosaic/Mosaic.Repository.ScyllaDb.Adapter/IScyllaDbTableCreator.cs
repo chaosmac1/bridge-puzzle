@@ -1,7 +1,5 @@
-using Mosaic.Share.Kernel.Database;
-
 namespace Mosaic.Repository.ScyllaDb.Adapter;
 
-public interface IScyllaDbTableCreator: ITableCreator {
-    
+public interface IScyllaDbTableCreator {
+    public Task CreateTablesAsync(CancellationToken cancellationToken = default);
 }

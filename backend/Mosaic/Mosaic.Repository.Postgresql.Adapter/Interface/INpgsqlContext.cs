@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Mosaic.Repository.Postgresql.Kernel;
 using Npgsql;
 
-namespace Mosaic.Repository.Postgresql.Adapter;
+namespace Mosaic.Repository.Postgresql.Adapter.Interface;
 
 public interface INpgsqlContext: IAsyncDisposable, IDisposable {
     public ValueTask<NpgsqlConnection> GetDbAsync();

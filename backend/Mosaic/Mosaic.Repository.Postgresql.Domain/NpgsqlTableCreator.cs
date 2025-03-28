@@ -1,4 +1,5 @@
 using Mosaic.Repository.Postgresql.Adapter;
+using Mosaic.Repository.Postgresql.Adapter.Interface;
 
 namespace Mosaic.Repository.Postgresql.Domain;
 
@@ -9,8 +10,8 @@ public class NpgsqlTableCreator: INpgsqlTableCreator {
         this.npgsqlContext = npgsqlContext;
     }
 
-    public async Task CreateTableAsync() {
-        await npgsqlContext.GetDbAsync();
-        // throw new NotImplementedException(nameof(CreateTableAsync));
+    public async Task CreateTablesAsync() {
+        var db = await npgsqlContext.GetDbAsync();
+        throw new NotImplementedException(nameof(CreateTablesAsync));
     }
 }
