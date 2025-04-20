@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late ImagePicker imagePicker;
 
   String? pickedImagePath;
-  String recognizedText = "";
+  String quiz = "";
 
   bool isRecognizing = false;
 
@@ -42,16 +42,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final inputImage = InputImage.fromFilePath(pickedImage.path);
-      final RecognizedText recognisedText =
-      await textRecognizer.processImage(inputImage);
+      final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
 
-      recognizedText = "";
+      List<String> map = [];
+      quiz = "";
 
       for (TextBlock block in recognisedText.blocks) {
         for (TextLine line in block.lines) {
-          recognizedText += "${line.text}\n";
+          map.add("${line.text}");
         }
       }
+
+      for (int i = 0; i < map.length/2; i++) {
+        quiz += map.elementAt(i);
+        quiz += ", ,";
+        quiz += map.elementAt(i + (map.length/2).toInt());
+        quiz += "\n";
+      }
+
     } catch (e) {
       if (!mounted) {
         return;
@@ -102,8 +110,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _copyTextToClipboard() async {
-    if (recognizedText.isNotEmpty) {
-      await Clipboard.setData(ClipboardData(text: recognizedText));
+    if (quiz.isNotEmpty) {
+      await Clipboard.setData(ClipboardData(text: quiz));
       if (!mounted) {
         return;
       }
@@ -183,9 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Flexible(
                           child: SelectableText(
-                            recognizedText.isEmpty
+                            quiz.isEmpty
                                 ? "No text recognized"
-                                : recognizedText,
+                                : quiz,
                           ),
                         ),
                       ],
