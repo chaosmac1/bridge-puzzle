@@ -1,10 +1,11 @@
-﻿using Mosaic.Share.Kernel.Word;
+﻿using Mosaic.Share.Kernel.ValueObject;
+using Mosaic.Share.Kernel.Word;
 
 namespace Mosaic.Share.Kernel.WordWithVector;
 
 public interface IReadOnlyWordWithVector: IReadOnlyWord  {
     public string Name { get; }
-    public Pgvector.Vector Vector { get; }
+    public Vector300 Vector { get; }
 
     public float ComputeDistance(IReadOnlyWordWithVector wordWithVector);
 
@@ -12,5 +13,5 @@ public interface IReadOnlyWordWithVector: IReadOnlyWord  {
 
     public IReadOnlyWordWithVector GetNears(IReadOnlyCollection<IReadOnlyWordWithVector> wordWithVectors);
 
-    public Pgvector.Vector ComputeMidpoint(IReadOnlyWordWithVector wordWithVector);
+    public Vector300 ComputeMidpoint(IReadOnlyWordWithVector wordWithVector);
 }

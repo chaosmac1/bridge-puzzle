@@ -2,7 +2,9 @@ using System.Collections.Frozen;
 using FastEndpoints;
 using Mosaic.Repository.Environment.Adapter.Interface;
 using Mosaic.Repository.Postgresql.Adapter.Interface;
+using Mosaic.Repository.Postgresql.Adapter.Query;
 using Mosaic.Share.Kernel;
+using Mosaic.Share.Kernel.ValueObject;
 using Mosaic.Share.Kernel.Word;
 using Mosaic.Share.Kernel.WordWithVector;
 using Pgvector;
@@ -67,12 +69,12 @@ public class PuzzleSolutionEndpoint : Endpoint<PuzzleSolutionRequest, PuzzleSolu
     private class Row {
         public IReadOnlyWordWithVector Left { get; }
         public IReadOnlyWordWithVector Right { get; }
-        public Vector MidVector { get; }
+        public Vector300 MidVector { get; }
         public int Space { get; }
         public float FoundWordDistance { get; set; }
         public IReadOnlyWordWithVector? FoundWordWithVector { get; private set; }
         
-        public Row(IReadOnlyWordWithVector left, IReadOnlyWordWithVector right, Vector midVector, uint space) {
+        public Row(IReadOnlyWordWithVector left, IReadOnlyWordWithVector right, Vector300 midVector, uint space) {
             Left = left;
             Right = right;
             MidVector = midVector;
@@ -84,16 +86,15 @@ public class PuzzleSolutionEndpoint : Endpoint<PuzzleSolutionRequest, PuzzleSolu
         }
 
         public void PutNearWordWithVectorAndRemoveFromList(List<IReadOnlyWordWithVector> readOnlyWordWithVectors) {
-            var nearVector = this.MidVector.GetNears(readOnlyWordWithVectors.Select(x => x.Vector));
+            var nearVector = this.MidVector.GetNears(readOnlyWordWithVectors.Select(x => x.Vector).ToArray());
             
             for (var i = 0; i < readOnlyWordWithVectors.Count; i++) {
                 var near = readOnlyWordWithVectors[i];
-                if (!Object.ReferenceEquals(near.Vector, nearVector)) {
+                if (near.Vector != nearVector) {
                     continue;
                 }
-
                 FoundWordWithVector = near;
-                FoundWordDistance = MidVector.ComputeDistance(near.Vector);
+                FoundWordDistance = MidVector.ComputeDistance(ref nearVector);
                 readOnlyWordWithVectors.RemoveAt(i);
                 return;
             }
@@ -105,9 +106,12 @@ public class PuzzleSolutionEndpoint : Endpoint<PuzzleSolutionRequest, PuzzleSolu
             if (Object.ReferenceEquals(this, row) || row.Space != this.Space) {
                 return false;
             }
+
+            var rowVec = row.FoundWordWithVector!.Vector;
+            var foundVec = this.FoundWordWithVector!.Vector;
             
-            float selfLower = this.MidVector.ComputeDistance(row.FoundWordWithVector!.Vector);
-            float rowLower = row.MidVector.ComputeDistance(this.FoundWordWithVector!.Vector);
+            float selfLower = this.MidVector.ComputeDistance(ref rowVec);
+            float rowLower = row.MidVector.ComputeDistance(ref foundVec);
 
             if (!(this.FoundWordDistance >= selfLower) || !(row.FoundWordDistance >= rowLower)) {
                 return false;
@@ -115,7 +119,6 @@ public class PuzzleSolutionEndpoint : Endpoint<PuzzleSolutionRequest, PuzzleSolu
             
             (this.FoundWordWithVector, row.FoundWordWithVector) = (row.FoundWordWithVector, this.FoundWordWithVector);
             return true;
-
         }
     }
 }

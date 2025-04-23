@@ -1,19 +1,23 @@
 ﻿using Mosaic.Share.Kernel;
+using Mosaic.Share.Kernel.ValueObject;
 using Mosaic.Share.Kernel.Word;
 using Mosaic.Share.Kernel.WordWithVector;
 using Pgvector;
 
-public class WordWithVectorDto: IReadOnlyWordWithVector {
+namespace Mosaic.Share.Kernel.WordWithVector;
+
+public sealed class WordWithVectorDto: IReadOnlyWordWithVector {
     public string Name { get; }
-    public Pgvector.Vector Vector { get; }
+    public Vector300 Vector { get; }
     
-    public WordWithVectorDto(string name, Vector vector) {
+    public WordWithVectorDto(string name, Vector300 vector) {
         Name = name;
         Vector = vector;
     }
 
     public float ComputeDistance(IReadOnlyWordWithVector wordWithVector) {
-        return this.Vector.ComputeDistance(wordWithVector.Vector);
+        var vector = wordWithVector.Vector;
+        return this.Vector.ComputeDistance(ref vector);
     }
 
     public (IReadOnlyWordWithVector WordWithVector, float Distance)[] ComputeDistances(IReadOnlyCollection<IReadOnlyWordWithVector> wordWithVectors) {
@@ -27,7 +31,8 @@ public class WordWithVectorDto: IReadOnlyWordWithVector {
         ;
     }
 
-    public Pgvector.Vector ComputeMidpoint(IReadOnlyWordWithVector wordWithVector) {
-        return this.Vector.ComputeMidpoint(wordWithVector.Vector);
+    public Vector300 ComputeMidpoint(IReadOnlyWordWithVector wordWithVector) {
+        var vector = wordWithVector.Vector;
+        return this.Vector.ComputeMidpoint(ref vector);
     }
 }

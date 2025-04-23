@@ -1,5 +1,6 @@
 ﻿using Mosaic.Repository.Postgresql.Kernel.Entities;
 using Mosaic.Share.Kernel.Word;
+using Mosaic.Share.Kernel.WordWithVector;
 
 namespace Mosaic.Repository.Postgresql.Kernel;
 

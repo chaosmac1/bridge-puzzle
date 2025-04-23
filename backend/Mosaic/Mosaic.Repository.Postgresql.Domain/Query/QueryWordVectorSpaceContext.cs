@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Mosaic.Repository.Postgresql.Adapter.Query;
 using Mosaic.Repository.Postgresql.Kernel;
 using Mosaic.Repository.Postgresql.Kernel.Entities;
 using Mosaic.Share.Kernel.Word;
@@ -6,7 +7,7 @@ using Mosaic.Share.Kernel.WordWithVector;
 
 namespace Mosaic.Repository.Postgresql.Domain.Query;
 
-public class QueryWordVectorSpaceContext {
+public class QueryWordVectorSpaceContext: IQueryWordVectorSpaceContext {
     private readonly NpgsqlContext _npgsqlContext;
     public QueryWordVectorSpaceContext(NpgsqlContext npgsqlContext) {
         _npgsqlContext = npgsqlContext;
@@ -29,8 +30,8 @@ public class QueryWordVectorSpaceContext {
         
         var strs = words.Select(x => x.Name).ToArray();
 
-        return (await (await _npgsqlContext.GetDbAsync()).QueryAsync<WordVectorSpace>(sql, new {Words = strs})
-            ).Select(x => x.ToWordWithVectorDto())
-             .ToArray<IReadOnlyWordWithVector>();
+        return (await (await _npgsqlContext.GetDbAsync()).QueryAsync<WordVectorSpace>(sql, new {Words = strs}))
+               .Select(x => x.ToWordWithVectorDto())
+               .ToArray<IReadOnlyWordWithVector>();
     }
 }

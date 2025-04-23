@@ -1,8 +1,11 @@
 using Dapper;
 using Mosaic.Repository.Environment.Adapter;
 using Mosaic.Repository.Environment.Adapter.Interface;
+using Mosaic.Repository.Postgresql.Domain.Handler;
+using Mosaic.Share.Kernel.ValueObject;
 using Npgsql;
 using Pgvector.Dapper;
+using Pgvector.Npgsql;
 
 namespace Mosaic.Repository.Postgresql.Domain;
 
@@ -29,14 +32,14 @@ public class NpgsqlBuilder {
         connStringBuilder.Pooling = true;
         connStringBuilder.ReadBufferSize = 1048576;
         connStringBuilder.WriteBufferSize = 1048576;
-        connStringBuilder.MaxPoolSize = 1024;
-        connStringBuilder.MinPoolSize = 256;
+        connStringBuilder.MaxPoolSize = 256;
+        connStringBuilder.MinPoolSize = 128;
         connStringBuilder.KeepAlive = 10;
         connStringBuilder.TcpKeepAlive = true;
         
         _npgsqlConnectionString = connStringBuilder.ToString();
         _npgsqlDataSourceBuilder = new NpgsqlDataSourceBuilder(_npgsqlConnectionString);
-        _npgsqlDataSourceBuilder.UseVector();
+        _npgsqlDataSourceBuilder.AddTypeInfoResolverFactory(new Vector300TypeInfoResolverFactory());
         
         SqlMapper.AddTypeHandler(new VectorTypeHandler());
     }

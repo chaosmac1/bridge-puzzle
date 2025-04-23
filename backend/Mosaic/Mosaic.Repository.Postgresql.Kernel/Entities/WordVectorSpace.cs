@@ -1,11 +1,12 @@
-﻿using Mosaic.Share.Kernel.WordWithVector;
+﻿using Mosaic.Share.Kernel.ValueObject;
+using Mosaic.Share.Kernel.WordWithVector;
 using Pgvector;
 
 namespace Mosaic.Repository.Postgresql.Kernel.Entities;
 
 public class WordVectorSpace {
     public string Word { get; set; } = "";
-    public Pgvector.Vector V300 { get; set; } = new (new ReadOnlyMemory<float>());
+    public Vector300 V300 { get; set; } = default;
     
     public static WordVectorSpace FromWordWithVector(IReadOnlyWordWithVector wordVectorSpace) {
         return new WordVectorSpace {
